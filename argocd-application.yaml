@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: microservices-gitops
+  namespace: argocd
+
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/AyeKyiPyar/microservices-gitops.git
+    targetRevision: HEAD
+    path: .
+
+    helm:
+      releaseName: pms
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: pms
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+    syncOptions:
+      - CreateNamespace=true
